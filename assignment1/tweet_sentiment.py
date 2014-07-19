@@ -1,7 +1,7 @@
 import sys, json, collections
 
 def main():
-	
+
 	sent_file = open(sys.argv[1])
 	tweet_file = open(sys.argv[2])
 
@@ -10,7 +10,7 @@ def main():
 	for tweet_str in tweet_file:
 		score = 0
 		tweet_dict = json.loads(tweet_str)
-		if('text' in tweet_dict.keys()): #ATTEN - can I do this with try?
+		if('text' in tweet_dict.keys()): #ATTEN - can I do this with try? None?
 			tweet = tweet_dict['text']
 			for word in tweet.split():
 				score += scores_dict[word]
@@ -30,8 +30,6 @@ def get_AFINN(sent_file):
 	for line in sent_file:
 		term, score  = line.split("\t")  # The file is tab-delimited.
 		scores[term] = int(score)  # Convert the score to an integer.
-
-	#print scores.items() # Print every (term, score) pair in the dictionary
 
 	return scores
 

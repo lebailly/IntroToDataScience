@@ -7,22 +7,26 @@ def main():
 	tweet_file = open(sys.argv[2])
 
 	scores_dict = get_AFINN(sent_file)
-	sent_words = scores_dict.keys()
-	new_words = collections.defaultdict(list)
+
+	happiness = collections.defaultdict(list)
 
 	for tweet_str in tweet_file:
 		score = 0
 		tweet_dict = json.loads(tweet_str)
-		if('text' in tweet_dict.keys()): #ATTEN - can I do this with try?
-			tweet = tweet_dict['text']
-			for word in tweet.split():
-				score += scores_dict[word]
-			for word in tweet.split():
-				if(word not in sent_words): new_words[word].append(score)
-				
-	for word, scores in new_words.items():
-		print word, sum(scores)/len(scores)
+		if('place' in tweet_dict.keys() and tweet_dict['place'] is not None): #ATTEN - can I do this with try?
+			if(tweet_dict['place']['country_code'] == 'US'):
+				state = tweet_dict["place"]["full_name"].split(',')[-1].strip()
+				if(state != 'USA' and 'text' in tweet_dict.keys()):
+					tweet = tweet_dict['text']
+					for word in tweet.split():
+						score += scores_dict[word]
+					happiness[state].append(score)
 
+	max_score = -10
+	for state, score in happiness.items():
+		if(sum(score)/len(score) > max_score): happy_state = state
+
+	print happy_state
 
 def get_AFINN(sent_file):
 	"""
