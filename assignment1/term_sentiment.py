@@ -1,24 +1,32 @@
+#!/usr/bin/env python2.7
+
+"""
+PROGRAM DOC 
+"""
+
 from __future__ import division
-import sys, json, collections
+import sys, json, collections, argparse
 
 def main():
 
-	sent_file = open(sys.argv[1])
-	tweet_file = open(sys.argv[2])
+	options = parse_arguments()
 
-	scores_dict = get_AFINN(sent_file)
+	scores_dict = get_AFINN(options.sent_file)
 	sent_words = scores_dict.keys()
 	new_words = collections.defaultdict(list)
 
-	for tweet_str in tweet_file:
+	for tweet_str in sys.stdin:
 		score = 0
-		tweet_dict = json.loads(tweet_str)
-		if('text' in tweet_dict.keys()): #ATTEN - can I do this with try?
-			tweet = tweet_dict['text']
-			for word in tweet.split():
-				score += scores_dict[word]
-			for word in tweet.split():
-				if(word not in sent_words): new_words[word].append(score)
+		JSONObject = json.loads(tweet_str)
+		try:
+			if(JSONObject['lang'] == 'en'):
+				tweet = JSONObject['text']
+				for word in tweet.split():
+					score += scores_dict[word]
+				for word in tweet.split():
+					if(word not in sent_words): new_words[word].append(score)
+		except:
+			pass
 				
 	for word, scores in new_words.items():
 		print word, sum(scores)/len(scores)
@@ -41,5 +49,16 @@ def get_AFINN(sent_file):
 
 	return scores
 
+def parse_arguments():
+    """ Parses arguments from comandline."""
+
+    parser = argparse.ArgumentParser(description = __doc__)
+
+    parser.add_argument('--sent_file', '-s', type=argparse.FileType('r'), 
+    	nargs='?', default='AFINN-111.txt',
+    	help='A tab-separated list of English words rated for valence.')
+    
+    return parser.parse_args()
+    
 if __name__ == '__main__':
     main()

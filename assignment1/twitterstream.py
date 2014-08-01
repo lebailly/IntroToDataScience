@@ -1,43 +1,65 @@
+#!/usr/bin/env python2.7
+
+"""
+Program streams tweets from json source specified by --url.  Stream is read
+for -t minutes. Log-in information in the form
+
+api_key <api key>
+api_secret <api secret>
+token_key <token key>
+token_secret <token secret>
+
+is read from stdin. Twitter data, in json format, is outputted to stdout.
+"""
+
 import oauth2 as oauth
 import urllib2 as urllib
+import argparse, sys
+from time import time
 
-# See assignment1.html instructions or README for how to get these credentials
+def main():
+  """
+  Parses arguments, retrives twitter stream, outputs
+  """
 
-api_key = "8iOtL0R2AusWVPHtLYTqjs79A"
-api_secret = "qjZeWlHaCjNmQWcOeqOcVo1USi7cJYygg1hqVyFmTnzxQijuTa"
-access_token_key = "547891252-5aMRuNk3YBZAm821zp7McCUOjJtq7KmDEcC4VWNA"
-access_token_secret = "2DMBu9BSWRG5IDUwVNKYYEa6xqKn4e56c5Yxri8HJCZBq"
+  options = parse_arguments()
 
-_debug = 0
+  log_in = {}
+  for line in options.log_in:
+    key, value = line.split()
+    log_in[key] = value
 
-oauth_token    = oauth.Token(key=access_token_key, secret=access_token_secret)
-oauth_consumer = oauth.Consumer(key=api_key, secret=api_secret)
+  response = twitterreq(url = options.url,log_in = log_in, 
+    method = "GET", debug = options.debug)
 
-signature_method_hmac_sha1 = oauth.SignatureMethod_HMAC_SHA1()
+  stop = time() + options.run_time*60
+  for line in response:
+    if(time() > stop): break
+    print line.strip()
 
-http_method = "GET"
+def twitterreq(url, log_in, method = 'GET', parameters = [], debug = 0):
+  """
+  Reads log in information from stdin.
+  Construct, sign, and open a twitter request using this information.
+  """
 
+  oauth_token=oauth.Token(key=log_in['access_token'],secret=log_in['token_secret'])
+  oauth_consumer=oauth.Consumer(key=log_in['api_key'],secret=log_in['api_secret'])
 
-http_handler  = urllib.HTTPHandler(debuglevel=_debug)
-https_handler = urllib.HTTPSHandler(debuglevel=_debug)
+  signature_method_hmac_sha1 = oauth.SignatureMethod_HMAC_SHA1()
 
-'''
-Construct, sign, and open a twitter request
-using the hard-coded credentials above.
-'''
-def twitterreq(url, method, parameters):
+  http_handler  = urllib.HTTPHandler(debuglevel=debug)
+  https_handler = urllib.HTTPSHandler(debuglevel=debug)
+
   req = oauth.Request.from_consumer_and_token(oauth_consumer,
-                                             token=oauth_token,
-                                             http_method=http_method,
-                                             http_url=url, 
-                                             parameters=parameters)
+        token=oauth_token, http_method=method, 
+        http_url=url, parameters=parameters)
 
   req.sign_request(signature_method_hmac_sha1, oauth_consumer, oauth_token)
 
   headers = req.to_header()
 
-  if http_method == "POST":
-    encoded_post_data = req.to_postdata()
+  if method == "POST": encoded_post_data = req.to_postdata()
   else:
     encoded_post_data = None
     url = req.to_url()
@@ -50,12 +72,31 @@ def twitterreq(url, method, parameters):
 
   return response
 
-def fetchsamples():
-  url = "https://stream.twitter.com/1/statuses/sample.json"
-  parameters = []
-  response = twitterreq(url, "GET", parameters)
-  for line in response:
-    print line.strip()
+def parse_arguments():
+    """ Parses arguments from comandline."""
+
+    parser = argparse.ArgumentParser(description = __doc__)
+
+    parser.add_argument('--log_in', '-l', type=argparse.FileType('r'), 
+      nargs='?', default='login.txt',
+      help='''Log-in info in a text file containg the following informaiton:
+                api_key <api key> \\n
+                api_secret <api secret> \\n
+                token_key <token key> \\n
+                token_secret <token secret>. Defaults to 'login.txt' ''')
+    parser.add_argument('--run_time', '-t', type=float, default=1,
+        help="Lenght of time (in minutes) to collect data from twitter stream.")  
+    parser.add_argument('--url', '-u', type=str, 
+      default="https://stream.twitter.com/1/statuses/sample.json",
+      help='''URL location of json data source.  Defaults to 
+              https://stream.twitter.com/1/statuses/sample.json''')
+    parser.add_argument('--debug', '-d', type=str, default=0,
+      help="Debug for urllib.HTTPHandler and urlib.HTTPSHandler (default 0).")
+    parser.add_argument('--method', '-m', type=str, default='GET',
+      help='''http_method used in oauth.Request.from_consumer_and_token 
+      (default is 'GET').''')
+
+    return parser.parse_args()
 
 if __name__ == '__main__':
-  fetchsamples()
+  main()

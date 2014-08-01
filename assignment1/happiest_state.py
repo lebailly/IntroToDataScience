@@ -1,30 +1,44 @@
+#!/usr/bin/env python2.7
+
+"""
+PROGRAM DOC 
+"""
+
 from __future__ import division
-import sys, json, collections
+import sys, json, collections, argparse
+
+#Add options to determin location in different ways (some can use internet).
+#Add option to print happiest state, or list of all states and scores
 
 def main():
 
-	sent_file = open(sys.argv[1])
-	tweet_file = open(sys.argv[2])
+	options = parse_arguments()
 
-	scores_dict = get_AFINN(sent_file)
-
+	scores_dict = get_AFINN(options.sent_file)
 	happiness = collections.defaultdict(list)
 
-	for tweet_str in tweet_file:
+	for tweet_str in sys.stdin:
 		score = 0
-		tweet_dict = json.loads(tweet_str)
-		if('place' in tweet_dict.keys() and tweet_dict['place'] is not None): #ATTEN - can I do this with try?
-			if(tweet_dict['place']['country_code'] == 'US'):
-				state = tweet_dict["place"]["full_name"].split(',')[-1].strip()
-				if(state != 'USA' and 'text' in tweet_dict.keys()):
-					tweet = tweet_dict['text']
+		JSONObject = json.loads(tweet_str)
+		try:
+			if(JSONObject['place']['country_code'] == 'US'):
+				state = JSONObject["place"]["full_name"].split(',')[-1].strip()
+				if(state != 'USA' and JSONObject['lang'] == 'en'):
+					tweet = JSONObject['text']
 					for word in tweet.split():
 						score += scores_dict[word]
 					happiness[state].append(score)
+		except:
+			pass
 
 	max_score = -10
-	for state, score in happiness.items():
-		if(sum(score)/len(score) > max_score): happy_state = state
+
+	if(len(happiness) == 0):
+		happy_state = None
+		sys.stderr.write('There are not enough tweets to preform this analysis!\n')
+	else:
+		for state, score in happiness.items():
+			if(sum(score)/len(score) > max_score): happy_state = state
 
 	print happy_state
 
@@ -45,5 +59,15 @@ def get_AFINN(sent_file):
 
 	return scores
 
+def parse_arguments():
+    """ Parses arguments from comandline."""
+
+    parser = argparse.ArgumentParser(description = __doc__)
+
+    parser.add_argument('--sent_file', '-s', type=argparse.FileType('r'), 
+    	nargs='?', default='AFINN-111.txt',
+    	help='A tab-separated list of English words rated for valence.')
+    
+    return parser.parse_args()
 if __name__ == '__main__':
     main()
