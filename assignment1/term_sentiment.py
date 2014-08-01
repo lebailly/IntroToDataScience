@@ -13,7 +13,8 @@ def main():
 
 	scores_dict = get_AFINN(options.sent_file)
 	sent_words = scores_dict.keys()
-	new_words = collections.defaultdict(list)
+	new_word_scores = collections.Counter()
+	new_word_counts = collections.Counter()#collections.defaultdict([0,0])
 
 	for tweet_str in sys.stdin:
 		score = 0
@@ -24,12 +25,14 @@ def main():
 				for word in tweet.split():
 					score += scores_dict[word]
 				for word in tweet.split():
-					if(word not in sent_words): new_words[word].append(score)
+					if(word not in sent_words): 
+						new_word_scores[word] += score
+						new_word_counts[word] += 1
 		except:
 			pass
 				
-	for word, scores in new_words.items():
-		print word, sum(scores)/len(scores)
+	for word, total_score in new_word_scores.items():
+		print word, total_score/new_word_counts[word]
 
 
 def get_AFINN(sent_file):
@@ -59,6 +62,6 @@ def parse_arguments():
     	help='A tab-separated list of English words rated for valence.')
     
     return parser.parse_args()
-    
+
 if __name__ == '__main__':
     main()
