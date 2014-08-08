@@ -87,24 +87,24 @@ Running `./top_ten.py` requires twitter data (in json format) in stdin.  This ca
 
 # Future Work
 
-* Genearl
-**Clean tweets (i.e. remove commas so "this," and "this" are the same). Use RegEx?
+## Genearl
+* Clean tweets (i.e. remove commas so "this," and "this" are the same). Use RegEx?
 
-*`tweet_sentiment`
-** Find way to include modifiers (i.e. 'happy' versus 'not happy')
+## `tweet_sentiment`
+* Find way to include modifiers (i.e. 'happy' versus 'not happy')
 
-*`term _sentiment.py`
-** More advanced learning algorithm to classify words.
+## `term _sentiment.py`
+* More advanced learning algorithm to classify words.
 
-*`happiest_state.py`
-** Give option for more advanced location classification.  Perhaps an on-line service to look up location from GPS coordinates. Keep current method in place (as no internet required).
-** Add option to print happiest state, or list of all states and scores
+# `happiest_state.py`
+* Give option for more advanced location classification.  Perhaps an on-line service to look up location from GPS coordinates. Keep current method in place (as no internet required).
+* Add option to print happiest state, or list of all states and scores
 
-*`frequency.py`
-** Add normlization option (to argparse)
-** Add Top Ten (or top n) option
-** Add sorting options.
-** Add English only option
+# `frequency.py`
+* Add normlization option (to argparse)
+* Add Top Ten (or top n) option
+* Add sorting options.
+* Add English only option
 
-*`top_ten.py`
-** Add English only option
+# `top_ten.py`
+* Add English only option
