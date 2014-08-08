@@ -47,6 +47,12 @@ Creates a numeric score rating if the tweet has a positive or negative sentiment
 
 Running `./tweet_sentiment.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.  Prints the scores to stdout.  Can print only the positive scores (`-p`) and the tweets in addition to score (`-t`).
 
+## Future Work
+
+* Clean tweets (i.e. remove commas so "this," and "this" are the same). Use RegEx?
+* Find way to include modifiers (i.e. 'happy' versus 'not happy')
+
+
 # `term_sentiment.py`
 
 ## About
@@ -57,12 +63,24 @@ Generates a sentiment score for words not found in the sentiment dictionary.  A 
 
 Running `./term_sentiment.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.  New words and scores are printed to stdout, tab-separated.
 
+## Future Work
+
+* More advanced learning algorithm to classify words.
+
 # `happiest_state.py`
 
 ## About
 
 Determines the happiest state from the tweets read.  Tweets are scored using the method describe in `tweet_sentiment.py`.  The location is determined from the "place":"full_name" attribute of the JSON data.  Tweets missing this information are ignored.  The two letter abbreivation for the state with the highest average score is printed to stdout.
 
+## Usage
+
+Running `./happiest_state.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.
+
+## Future Work
+
+* Give option for more advanced location classification.  Perhaps an on-line service to look up location from GPS coordinates. Keep current method in place (as no internet required).
+* Add option to print happiest state, or list of all states and scores
 
 # `frequency.py`
 
@@ -74,6 +92,12 @@ Determiens the frequency of different words found in tweets.  The frequency is m
 
 Running `./frequency.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.
 
+## Future Work
+
+* Add normlization option (to argparse)
+* Add Top Ten (or top n) option
+* Add sorting options.
+* Add English only option
 
 # `top_ten.py`
 
@@ -85,26 +109,6 @@ Determines the top ten hash tags and prints them to stdout with their count.
 
 Running `./top_ten.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.
 
-# Future Work
+## Future Work
 
-## Genearl
-* Clean tweets (i.e. remove commas so "this," and "this" are the same). Use RegEx?
-
-## `tweet_sentiment`
-* Find way to include modifiers (i.e. 'happy' versus 'not happy')
-
-## `term _sentiment.py`
-* More advanced learning algorithm to classify words.
-
-# `happiest_state.py`
-* Give option for more advanced location classification.  Perhaps an on-line service to look up location from GPS coordinates. Keep current method in place (as no internet required).
-* Add option to print happiest state, or list of all states and scores
-
-# `frequency.py`
-* Add normlization option (to argparse)
-* Add Top Ten (or top n) option
-* Add sorting options.
-* Add English only option
-
-# `top_ten.py`
 * Add English only option
