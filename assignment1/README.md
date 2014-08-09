@@ -1,22 +1,16 @@
 # Description
 
-These programs collect current information from twitter and preform a few different types of basic analysis. This project started as part of a Coursera course on Data Science, however I have expanded upon it in several ways.
+These programs collect current information from twitter and preform different types of basic analysis (such as listing the top hash tags and determining a numeric rating of the tweet sentiment). This project started as part of a Coursera course on [Data Science][1], however I have expanded upon it in several ways.  The original assignment description is available [here][2].
 
 # `twitterstream.py`
 
 ## About
 
-Used to feetch live stream data from twitter.  
+Used to fetch live stream data from twitter.  
 
 ## Set Up
 
-Requires oauth2.  Must create a file name `login.txt` which contains:
-api_key <api key>
-api_secret <api secret>
-token_key <token key>
-token_secret <token secret>
-
-See `login_example.txt' for an example.  To get credentials:
+Requires oauth2.  Must create a file name `login.txt` which contains the api key, the api secret, the token key, and the token secret.  See `login_example.txt' for the format.  To get credentials:
 
 -   Create a twitter account if you do not already have one.
 -   Go to https://dev.twitter.com/apps and log in with your twitter
@@ -35,7 +29,7 @@ See `login_example.txt' for an example.  To get credentials:
 
 ## Usage
 
-Running `./twitterstream.py` will fetch a twitter stream and print the stream (in json format) to stdout for 1 minute.  Use `-t` to specify the run time or use `-u` to run for an unlimited length of time.
+Running `./twitterstream.py` will fetch a twitter stream and print the stream (in JSON format) to stdout for 1 minute.  Use `-t` to specify the run time or use `-u` to run for an unlimited length of time.
 
 # `tweet_sentiment.py`
 
@@ -45,7 +39,7 @@ Creates a numeric score rating if the tweet has a positive or negative sentiment
 
 ## Usage
 
-Running `./tweet_sentiment.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.  Prints the scores to stdout.  Can print only the positive scores (`-p`) and the tweets in addition to score (`-t`).
+Running `./tweet_sentiment.py` requires twitter data (in JSON format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.  Prints the scores to stdout.  Can print only the positive scores (`-p`) and the tweets in addition to score (`-t`).
 
 ## Future Work
 
@@ -61,7 +55,7 @@ Generates a sentiment score for words not found in the sentiment dictionary.  A 
 
 ## Usage
 
-Running `./term_sentiment.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.  New words and scores are printed to stdout, tab-separated.
+Running `./term_sentiment.py` requires twitter data (in JSON format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.  New words and scores are printed to stdout, tab-separated.
 
 ## Future Work
 
@@ -71,30 +65,30 @@ Running `./term_sentiment.py` requires twitter data (in json format) in stdin.  
 
 ## About
 
-Determines the happiest state from the tweets read.  Tweets are scored using the method describe in `tweet_sentiment.py`.  The location is determined from the "place":"full_name" attribute of the JSON data.  Tweets missing this information are ignored.  The two letter abbreivation for the state with the highest average score is printed to stdout.
+Determines the happiest state from the tweets read.  Tweets are scored using the method describe in `tweet_sentiment.py`.  The location is determined from the "place":"full_name" attribute of the JSON data.  Tweets missing this information are ignored.  The two letter abbreviation for the state with the highest average score is printed to stdout.
 
 ## Usage
 
-Running `./happiest_state.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.
+Running `./happiest_state.py` requires twitter data (in JSON format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.
 
 ## Future Work
 
-* Give option for more advanced location classification.  Perhaps an on-line service to look up location from GPS coordinates. Keep current method in place (as no internet required).
+* Give option for more advanced location classification.  Perhaps an on-line service to look up location from GPS coordinates. Keep current method in place (as no Internet required).
 * Add option to print happiest state, or list of all states and scores
 
 # `frequency.py`
 
 ## About
 
-Determiens the frequency of different words found in tweets.  The frequency is measured simply as a count.  The word and frequeyc is printed to stdout.
+Determines the frequency of different words found in tweets.  The frequency is measured simply as a count.  The word and frequency is printed to stdout.
 
 ## Usage
 
-Running `./frequency.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.
+Running `./frequency.py` requires twitter data (in JSON format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.
 
 ## Future Work
 
-* Add normlization option (to argparse)
+* Add normalization option to argparse
 * Add Top Ten (or top n) option
 * Add sorting options.
 * Add English only option
@@ -103,12 +97,15 @@ Running `./frequency.py` requires twitter data (in json format) in stdin.  This 
 
 ## About
 
-Determines the top ten hash tags and prints them to stdout with their count.
+Determines the top ten hash tags of the data read from stdin and prints them to stdout with their count.
 
 ## Usage
 
-Running `./top_ten.py` requires twitter data (in json format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.
+Running `./top_ten.py` requires twitter data (in JSON format) in stdin.  This can be pipped with `twitterstream.py` or run using saved data.
 
 ## Future Work
 
 * Add English only option
+
+[1]: https://github.com/uwescience/datasci_course_materials
+[2]: https://github.com/lebailly/IntroToDataScience/blob/master/assignment1/assignment1.md
