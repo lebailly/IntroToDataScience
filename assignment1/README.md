@@ -1,6 +1,6 @@
 # Description
 
-These programs collect current information from twitter and preform different types of basic analysis (such as listing the top hash tags and determining a numeric rating of the tweet sentiment). This project started as part of a Coursera course on [Data Science][1], however I have expanded upon it in several ways.  The original assignment description is available [here][2].
+These programs collect current information from twitter and preform different types of basic analysis (such as listing the top hash tags and determining a numeric rating of the tweet sentiment). This project started as part of a [Coursera course][0] on [Data Science][1], however I have expanded upon it in several ways.  The original assignment description is available [here][2].
 
 # `twitterstream.py`
 
@@ -10,7 +10,7 @@ Used to fetch live stream data from twitter.
 
 ## Set Up
 
-Requires oauth2.  Must create a file name `login.txt` which contains the api key, the api secret, the token key, and the token secret.  See `login_example.txt' for the format.  To get credentials:
+Requires oauth2.  Must create a file name `login.txt` which contains the api key, the api secret, the token key, and the token secret.  See `login_example.txt` for the format.  To get credentials:
 
 -   Create a twitter account if you do not already have one.
 -   Go to https://dev.twitter.com/apps and log in with your twitter
@@ -107,5 +107,6 @@ Running `./top_ten.py` requires twitter data (in JSON format) in stdin.  This ca
 
 * Add English only option
 
+[0]: https://class.coursera.org/datasci-002
 [1]: https://github.com/uwescience/datasci_course_materials
 [2]: https://github.com/lebailly/IntroToDataScience/blob/master/assignment1/assignment1.md
