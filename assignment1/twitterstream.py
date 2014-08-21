@@ -10,6 +10,12 @@ token_key <token key>
 token_secret <token secret>
 
 is read from --login. Twitter data, in JSON format, is outputted to stdout.
+
+This program was originally developed by Bill Howe (used as part of the
+"Introduction to Data Science" course on Coursera).  I altered the program to
+output the data to stdout (not a file, so it could be part of a pipe) and also 
+added all the argparse options (which removed the requirement of hardwiring
+the twitter credentials, along with add the timing features).
 """
 
 import oauth2 as oauth
